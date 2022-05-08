@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>我的心意</title>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<meta name="renderer" content="webkit">
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="bts/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="bts/css/bootstrap.css">
+<style>
+*{
+	padding:0px;
+	margin:0px;
+}
+img{
+position: absolute;
+display:block;
+opacity:0;
+}
+div{
+	position:absolute;
+}
+.modal div{
+	position: initial;
+}
+.bg{
+	top:0px;
+	width:100%;
+}
+.color{
+	color:#F3AB63;
+}
+.content{
+	left: 13%;
+	font-size: 18px;
+    transform-origin:0 0;
+    text-indent:2em;
+    letter-spacing:2px;
+    word-break: break-all;
+    line-height: 1.8;
+    font-weight:bold;
+}
+.music{
+	width:8%;
+	right:4%;
+	top:10px;
+	opacity:1;
+	z-index:10;
+	animation:myrotate 3s linear infinite;
+}
+.wechat{
+	position: absolute;
+	top:100px;
+	width: 75%;
+	margin-left: 15%;
+	transform: rotateZ(4deg);
+}
+.wechat>div{
+	display: flex;
+	align-items: center;
+}
+.wechat div{
+	position: initial !important;
+}
+.wechat-img{
+	width: 90%;
+	height: 296px;
+	margin-left: 5%;
+	opacity: 0;
+	position: relative;
+}
+.wechat1{
+	margin-left:15px;
+}
+.wechat2{
+	float:right;
+	margin-right: 10px;
+	margin-top: 30px;
+}
+.head{
+	position: initial !important;
+	opacity: 1;
+	width: 50px;
+	height: 50px;
+}
+.wechat-con{
+	background-color:#89D961;
+	padding: 5px 8px;
+	border-radius: 3px;
+}
+.wechat-con1{
+	margin-left: 10px;
+}
+.wechat-con2{
+	margin-right: 10px;
+}
+@keyframes myrotate
+{
+0%{transform: rotateZ(0deg);}
+100%{transform: rotateZ(360deg);}
+}
+</style>
+<script>
+	var ratio = $(window).width()/640;
+	$(function(){
+		$(".content").css({
+			width:70/ratio+"%",
+			top:740*ratio+"px",
+			transform:'scale('+ratio+') rotateZ(-5deg)'
+		});
+		$(".btn-primary").click(function(){
+			var pwd = $("[name=pwd]").val();
+			if(pwd == 'gdl&zhy'){
+				$("audio")[0].play();
+				$("#myModal").modal('hide');
+				start();
+			}else{
+				alert('密码错误')
+			}
+		});
+		function start(){
+			var speed = 10;
+			var span = $(".content");
+			function setContent(content,callback,eachCallback){
+				//先隐藏
+				span.animate({opacity:0},100*speed,function(){
+					span.text('').css('opacity',1);
+					var count = 0;
+					var id = setInterval(function(){
+						if(count==content.length){
+							clearInterval(id);
+							callback && callback();
+						}else{
+							span.text(content.substr(0,count+1));
+							eachCallback && eachCallback(count);
+							count++;
+						}
+					},20*speed);
+				});
+			}
+			callback1();
+			function callback1(){
+				setContent("2021年10月6日晚上9点，我们微信上认识了……",function(){
+					$(".wechat1").animate({opacity:1},100*speed,function(){
+						$(".wechat2").animate({opacity:1},100*speed,function(){
+							callback2();
+						});
+					});
+				});
+			}
+			function callback2(){
+				setContent("从工作聊到专业，从专业聊到学校，疫情，股票，旅游……无所不谈，一切是那么的自然，舒服，这是我从未有过的感觉，彷佛这就是命中注定的缘分，甚至连两尊大佛都是这么的相似~~~///(^v^)\\\~~~",function(){
+					callback3();
+				},function(count){
+					if(count == 67){
+						setImg('res/dafo1.jpg');
+					}else if(count == 87){
+						setImg('res/dafo2.jpg');
+					}
+				});
+			}
+			
+			function callback3(){
+				var content = '咱俩聊的最多的话题就是吃的了，你不能喝牛奶，沾一点都不行，喜欢吃鱼，不能吃甜的，因为会发胖，减肥可以说是女生的宿命了 ~ ~ ';
+				setContent(content,callback);
+				function callback(){
+					$(".wechat").html('');
+					var cons = "龙猫，天空之城，哈尔的移动城堡，千与千寻，悬崖上的金鱼姬，魔女宅急便，风之谷，起风了，… …".split("，");
+					var count = 0;
+					var id = setInterval(function(){
+						if(count == cons.length){
+							clearInterval(id);
+						}else{
+							$(".wechat").append('<div>《'+cons[count]+'》</div>');		
+							count++;
+						}
+					},100*speed)
+					callback4();
+				}
+			}
+			
+			function callback4(){
+				var content = '你的头像我一眼就认出来了，是《魔女宅急便》的女主，我也喜欢宫崎骏，尤其是配乐每一首都恰到好处，如果有机会，我一定要带你一起现场听一场宫崎骏动漫作品音乐会';
+				setContent(content,callback);
+				function callback(){
+					callback5();
+				}
+			}
+			function callback5(){
+				var content = '聊着聊着，就聊到了过年，疫情突发，你没法回家了，这么久了还没见过面呢，于是过完年我就立即去找你了，见到你的第一面就觉得你好小只啊，站在不高的我的身边，倒也显得小鸟依人O(∩_∩)O';
+				setContent(content,callback);
+				function callback(){
+					setImg('res/youwan1.jpg',function(){
+						setImg('res/youwan2.jpg',function(){
+							setImg('res/youwan3.jpg',null);	
+						});
+					});
+					callback6();
+				}
+			}
+			
+			function callback6(){
+				var content = '这两天里，一起逛了好多地方，玩了很多娱乐设施，最后止步于暴打乒乓球项目 … … ，顺便偷拍了一张你的照片，嘿嘿~~';
+				setContent(content,callback);
+				function callback(){
+					callback7();
+				}
+			}
+			
+			function callback7(){
+				var content = '两天时间过的很快，一眨眼就要分开了，漫天的大雪似乎在挽留我，说好的，下一个双休就再见面，然而一波一波的疫情，直到现在，都没停息';
+				setContent(content,callback);
+				function callback(){
+					callback8();
+				}
+			}
+			
+			function callback8(){
+				var content = '你说希望有一个明确的开始，否则就只是在聊聊天，没有实质的进展，我的想法是在下次见面时就向你表露心意，没想到一拖就拖到了现在';
+				setContent(content,callback);
+				function callback(){
+					callback9();
+				}
+			}
+			
+			function callback9(){
+				var content = '这期间你也犹豫过，我也彷徨过，然而感觉是不会骗人的，跟你相处的这段时间是我觉得最舒服的一段时间，';
+				content += '我也在不断的努力让自己变的更好，最起码在吃的方面不会让你委屈，以后家里的饭都我来做，你就负责吃就行了~~~';
+				setContent(content,callback);
+				function callback(){
+					callback10();
+				}
+			}
+			
+			function callback10(){
+				var content = '人生路漫漫，只求一人相伴，咱俩一起走下去吧！！！';
+				setContent(content,callback);
+				function callback(){
+					$(".wechat").animate({opacity:0},100*speed,function(){
+						$(".wechat").html('').css('opacity',1);
+						$(".img-1").animate({opacity:0},100*speed,function(){
+							$(".img-1").attr("src","bg1_1.png").animate({opacity:1},100*speed);
+						});
+					});
+				}
+			}
+			
+			function setImg(img,callback){
+				$(".wechat").animate({opacity:0},100*speed,function(){
+					$(".wechat").html('').css('opacity',1);
+					$(".wechat").html("<img src='"+img+"' class='wechat-img'>").find(".wechat-img").animate({opacity:1},300*speed,function(){
+						callback&&callback();
+					});
+				});
+				
+			}
+			
+		}
+		
+		var nowPos = 0;
+		$(".img-1").animate({opacity:1},100,function(){
+			$(".img-2").animate({opacity:1},100,function(){
+				$("#myModal").modal('show');
+				// start();
+			});
+		});
+		
+		var play = true;
+		$(".music").click(function(){
+			if(play){
+				$(this).css("animation","initial");
+				$("audio")[0].pause();
+			}else{
+				$(this).css("animation","myrotate 3s linear infinite");
+				$("audio")[0].play();
+			}
+			play = !play;
+		});
+	});
+</script>
+</head>
+<body style="background-color: rgb(243, 171, 99); zoom: 1;">
+<img class="music" src="music.png" style="">
+<img class="img-1 bg" src="bg1.png" style="">
+<img class="img-2 bg" src="bg2.png" style="">
+<div class='wechat'>
+	<div class="wechat1" style='opacity: 0;'>
+		<img src="head1.jpg" class='head'/>
+		<div class='wechat-con wechat-con1'>你好，我是高栋梁</div>
+	</div>
+	<div class="wechat2" style='opacity: 0;'>
+		<div class='wechat-con wechat-con2'>你好，我是庄涵月</div>
+		<img src="head2.jpg" class='head'/>
+	</div>
+</div>
+<div class="content color" style="">
+	<span></span>
+</div>
+<audio autoplay="autoplay">
+	<source src="res/qianxun.mp3" type="audio/mpeg">
+</audio>
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">密码</h4>
+            </div>
+            <div class="modal-body"><input type='text' name='pwd' class='form-control'/></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">确认</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</body></html>

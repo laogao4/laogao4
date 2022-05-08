@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>你好，2021</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		html, body {
+			height: 100%;
+		}
+
+		body {
+			background-color: #000000;
+			margin: 0;
+			font-family: Arial;
+			overflow: hidden;
+		}
+
+		a {
+			color: #ffffff;
+		}
+
+		#info {
+			position: absolute;
+			width: 100%;
+			color: #ffffff;
+			padding: 5px;
+			font-family: Monospace;
+			font-size: 13px;
+			font-weight: bold;
+			text-align: center;
+			z-index: 1;
+		}
+
+		.element {
+			width: 140px;
+			height: 180px;
+			box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
+			border: 1px solid rgba(127,255,255,0.25);
+			cursor: pointer;
+		}
+
+		.element:hover {
+			box-shadow: 0px 0px 20px rgba(0,255,255,0.75);
+			border: 1px solid rgba(127,255,255,0.75);
+		}
+
+		.element .number {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			font-size: 20px;
+			color: rgba(127,255,255,0.75);
+		}
+
+		.element .symbol {
+			position: absolute;
+			top: 65px;
+			width: 100%;
+			font-size: 30px;
+			text-align: center;
+			color: rgba(255,255,255,0.75);
+			font-weight: bold;
+			-webkit-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			-moz-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			-o-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			-ms-filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+			filter: drop-shadow(0px 0px 20px rgba(0,255,255,0.95));
+		}
+
+		.element .details {
+			position: absolute;
+			top: 125px;
+			width: 100%;
+			font-size: 18px;
+			text-align: center;
+			color: rgba(127,255,255,0.75);
+			height: 42px;
+			overflow: hidden;
+		}
+		.show {
+			width: 500px;
+			height: 500px;
+			left:-250px;
+			top:-250px;
+			box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
+			border: 1px solid rgba(127,255,255,0.25);
+			background-color:#EBEBEB;
+			background-color:rgba(12, 87, 200, 0.8);				
+			cursor: default;
+			position: absolute;
+			transform-style: preserve-3d;
+			color: white;
+			font-size: 50px;
+			overflow: hidden;
+			cursor: pointer;
+			opacity:0;
+		}
+		.show:hover{
+			box-shadow: 0px 0px 20px rgba(0,255,255,0.75);
+			border: 1px solid rgba(127,255,255,0.75);
+		}
+		.show1{
+			transform:translate3d(0%, 0%, -250px) rotateZ(180deg);
+		}
+		.show2{
+			transform:translate3d(-50%, 0%, 0px) rotateY(90deg) rotateZ(180deg);
+			/*background-color:rgba(255, 0, 0, 1);*/
+		}
+		.show3{
+			transform:translate3d(50%, 0%, 0px) rotateY(-90deg) rotateZ(180deg);
+			/*background-color:rgba(0,255,  0, 1);*/
+		}
+		.show4{
+			transform:translate3d(0%, 0%, 250px) rotateY(-180deg) rotateZ(180deg);
+			/*background-color:rgba( 0, 0,255, 1);*/
+		}
+		.show5{
+			transform:translate3d(0%, -50%, 0px) rotateX(90deg) rotateY(180deg);
+			/*background-color:rgba(255, 255, 0, 1);*/
+		}
+		.show6{
+			transform:translate3d(0%, 50%, 0px) rotateX(90deg);
+			/*background-color:rgba(255, 0, 255, 1);*/
+		}
+		.msgBody{
+			padding: 10px;
+		}
+		.msgBody div{
+			display: inline-block;
+			max-width: 300px;
+			vertical-align: top;
+			font-size: 20px;				
+			color: black;
+			border-radius: 5px;				
+			min-height: 30px;
+			line-height:25px;
+			padding: 10px;
+			word-wrap: break-word;
+			word-break: break-all;
+		}
+		.sender{
+			text-align: right;
+		}
+		.sender div{
+			background-color:#A0E75A;
+			margin-right: 10px;
+			text-align: left;
+		}
+		.sender img{
+			float:right;
+		}
+		.receiver div{
+			background-color:#fff;
+			margin-left: 10px;
+		}
+		.msgBody img{
+			width:50px;
+			height:50px;
+		}
+	</style>
+</head>
+	<body>
+		<script src="data.js"></script>
+		<script src="three.min.js"></script>
+		<script src="tween.min.js"></script>
+		<script src="TrackballControls.js"></script>
+		<script src="CSS3DRenderer.js"></script>
+		<script src="jquery-1.10.1.min.js"></script>
+		<div id="container"></div>
+		<audio autoplay>
+			<source src="music.mp3" type="audio/mpeg">
+		</audio>
+		<canvas id="myCanvas" width="200" height="100"></canvas>
+		<script>
+			var imgFile = [],videoFile = [],audioFile = [];
+			for(var i in fileMap){
+				if(fileMap[i].match(/jpg|jpeg|png|bmp|gif/i)){
+					imgFile.push(i);
+				}else if(fileMap[i].match(/mp4/i)){
+					videoFile.push(i);
+				}else if(fileMap[i].match(/mp3/i)){
+					audioFile.push(i);
+				}
+			}
+			var dateArr = [],dateObj={};
+			for(var i in chatMsgs){
+				var nowMsg = chatMsgs[i];
+				var ym = nowMsg.timeFlag.substring(0,7);
+				if(dateObj[ym]){
+					dateObj[ym].data.push(nowMsg);
+				}else{
+					dateObj[ym] = {data:[nowMsg],start:0};
+					dateArr.push(ym);
+				}
+			}
+			var table = [];
+			for(var i=0;i<dateArr.length;i++){
+				table.push([dateObj[dateArr[i]].data.length,dateArr[i],dateObj[dateArr[i]].data[0].msgBody,'msg']);
+			}
+			table.push([imgFile.length,'图片','..','img']);
+			var camera,scene,renderer;
+			var controls;
+			var objects=[];
+			var targets=[];
+			var initRadius = 1700;
+			init();
+			animate();
+			function init(){
+				camera= new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,5000);
+				camera.position.z=initRadius;
+				scene= new THREE.Scene();
+				var tableLen = table.length;
+				for(var i=0;i<tableLen;i++){
+					var tableNow=table[i];
+					var style = (i < tableLen - 1) ? ("rgba(12,87,200,"+(Math.random()*0.5+0.25)+")"):("rgba(68, 146, 153,"+(Math.random()*0.5+0.25)+")");
+					var temp = "<div class='element' dataType='"+tableNow[3]+"' style='background-color:"+style+"'>";
+					temp += "<div class='number'>"+tableNow[0]+"</div>";
+					temp += "<div class='symbol'>"+tableNow[1]+"</div>";
+					temp += "<div class='details'>"+tableNow[2]+"</div>";
+					temp += "</div>";
+					var css3DObj= new THREE.CSS3DObject($(temp)[0]);
+					css3DObj.position.x=Math.random()*4000-2000;
+					css3DObj.position.y=Math.random()*4000-2000;
+					css3DObj.position.z=Math.random()*4000-2000;
+					scene.add(css3DObj);
+					objects.push(css3DObj);
+				} ;			
+				var vector3= new THREE.Vector3();
+				for(var i=0;i<tableLen;i++){
+					var angle=Math.acos(-1+(2*i)/tableLen);
+					var angle2=Math.sqrt(tableLen*Math.PI)*angle;
+					var css3DObj= new THREE.Object3D();
+					css3DObj.position.x=1000*Math.cos(angle2)*Math.sin(angle);
+					css3DObj.position.y=1000*Math.sin(angle2)*Math.sin(angle);
+					css3DObj.position.z=1000*Math.cos(angle);
+					vector3.copy(css3DObj.position).multiplyScalar(2);
+					css3DObj.lookAt(vector3);
+					targets.push(css3DObj);
+				} ;
+				renderer= new THREE.CSS3DRenderer();
+				renderer.setSize(window.innerWidth,window.innerHeight);
+				renderer.domElement.style.position="absolute";
+				document.getElementById("container").appendChild(renderer.domElement);
+				controls= new THREE.TrackballControls(camera,renderer.domElement);
+				controls.rotateSpeed=0.5;
+				controls.addEventListener("change",render);
+				transform(targets,5000);
+				window.addEventListener("resize",onWindowResize,false);
+			} ;
+			function transform(targets,speed){
+				TWEEN.removeAll();
+				for(var i=0;i<objects.length;i++){
+					var css3DObj=objects[i];
+					var targetNow=targets[i]; 
+					new TWEEN.Tween(css3DObj.position).to({x:targetNow.position.x,y:targetNow.position.y,z:targetNow.position.z},Math.random()*speed+speed).easing(TWEEN.Easing.Exponential.InOut).start(); 
+					new TWEEN.Tween(css3DObj.rotation).to({x:targetNow.rotation.x,y:targetNow.rotation.y,z:targetNow.rotation.z},Math.random()*speed+speed).easing(TWEEN.Easing.Exponential.InOut).start();
+				}
+				new TWEEN.Tween(this).to({},speed*2).onUpdate(render).start();
+			}
+			function onWindowResize(){
+				camera.aspect=window.innerWidth/window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize(window.innerWidth,window.innerHeight);
+			}
+			var reg = 0,rotateFlag = 1;
+			function animate(){
+				if(rotateFlag){
+					camera.position.z = initRadius*Math.cos(reg);
+					camera.position.x = initRadius*Math.sin(reg);
+					reg += 0.005;
+				}
+				requestAnimationFrame(animate);
+				TWEEN.update();
+				controls.update();
+			}
+			function render(){
+				renderer.render(scene,camera);
+			}
+			
+			var nowClick = "";//当前点击的月份或者其它
+			var clickType = "";
+			$("#container .element").click(function(event){
+				if($("#container .show").length == 0){
+					var temp = "";
+					for(var i=1;i<=6;i++){
+						//flag表示是否第一次进行显示信息
+						temp+="<div class='show show"+i+"'><div firstFlag="+i+" overFlag=0></div></div>";
+					}
+					$(this).parent().append(temp);
+				}else{
+					$(".show > div").stop();//停止所有事件
+					$(".show div").attr("overFlag",0);
+				}
+				clickType = $(this).attr('dataType');
+				if(clickType == 'msg'){
+					nowClick = $(this).find(".symbol").text();
+					if(!nowClick){
+						return;//此时显示的是其它元素
+					}
+					if(dateObj[nowClick].over == 1){
+						dateObj[nowClick].over = dateObj[nowClick].start = 0;
+					}
+					changeCube();
+				}else{
+					randomOther($(this));
+				}
+			});
+			//随即显示一组图片或视频或音频
+			var otherInterval = 0;
+			var otherCount = 1;
+			function randomOther(div){
+				clearInterval(otherInterval);				
+				var eles = $(".element[datatype!="+clickType+"],.show>div");
+				var nowIndex = 0;
+				otherInterval = setInterval(function(){
+					var eleNow = $(eles[nowIndex]);
+					var index = clickType == 'Msg' ? 0 : Math.floor(Math.random()*window[clickType+"File"].length);
+					var other = "";
+					nowIndex++;
+					if(eleNow.parents(".show").length == 1){
+						if(clickType == 'Msg'){
+						
+						}else if(clickType == 'img'){
+							eleNow.html("<img src='file/"+imgFile[index]+"' width='500px' height='500px'/>").css("background-color","initial");
+						}else{
+							eleNow.html("<"+clickType+" src='file/"+videoFile[index]+"' controls='controls' width='500px' height='500px'></"+clickType+">").css("background-color","initial");
+						}						
+						eleNow.css("margin-top","0px").parent().animate({
+							opacity:1
+						});
+					}else{
+						if(clickType == 'Msg'){
+							var tableNow=table[nowIndex-1];
+							var temp = "<div><div class='number'>"+tableNow[0]+"</div>";
+							temp += "<div class='symbol'>"+tableNow[1]+"</div>";
+							temp += "<div class='details'>"+tableNow[2]+"</div></div>";
+							other = eleNow.css('background-color','rgba(12,87,200,'+(Math.random()*0.5+0.25)+')').html(temp).children("div");
+						}else if(clickType == 'img'){
+							other = eleNow.html("<img src='file/"+imgFile[index]+"' width='140px' height='180px'/>").css("background-color","initial").find(clickType);
+						}else{
+							other = eleNow.html("<"+clickType+" src='file/"+videoFile[index]+"' controls='controls' width='140px' height='180px'></"+clickType+">").css("background-color","initial").find(clickType);
+						}
+						if(clickType != 'Msg'){
+							var id2 = setInterval(function(){
+								var nowRotateY = other.attr("nowRotateY");
+								if(!nowRotateY){
+									nowRotateY = 0;
+								}
+								nowRotateY--;
+								other.attr("nowRotateY",nowRotateY);
+								other.css("transform","rotateY("+nowRotateY+"deg)");
+								if(nowRotateY == -360){
+									clearInterval(id2);
+								}
+							},10);
+						}						
+					}
+					if(nowIndex == eles.length){
+						clearInterval(otherInterval);
+						changeType(div);
+					}
+				},100);
+			}
+			function changeType(div){
+				otherCount++;
+				if(otherCount%2 == 0){
+					div.attr("dataType","Msg");
+					div.find(".number").html("");
+					div.find(".symbol").html("聊天");
+					div.find(".details").html("..");
+				}else if(otherCount%2 == 1){
+					div.attr("dataType","img");
+					div.find(".number").html(imgFile.length);
+					div.find(".symbol").html("图片");
+					div.find(".details").html("..");
+				}else if(otherCount%2 == 2){
+					div.attr("dataType","video");
+					div.find(".number").html(videoFile.length);
+					div.find(".symbol").html("视频");
+					div.find(".details").html("..");
+				}else if(otherCount%2 == 3){
+					div.attr("dataType","audio");
+					div.find(".number").html(audioFile.length);
+					div.find(".symbol").html("音频");
+					div.find(".details").html("..");
+				}
+			}
+			function cube(){
+				var c=document.getElementById("myCanvas");
+				var cxt=c.getContext("2d");
+				cxt.fillStyle="#FF0000";
+				cxt.fillRect(0,0,150,75);
+				var geometry = new THREE.CubeGeometry(150, 150, 150);
+				texture = new THREE.Texture( c);
+				var material = new THREE.MeshBasicMaterial({map:texture});
+				texture.needsUpdate = true;
+				mesh = new THREE.Mesh( geometry,material );
+				scene.add( mesh );
+			}
+			function changeCube(){				
+				var show = $(".show");
+				if(show.attr("flag")){
+					show.animate({
+						opacity:0
+					},2000,function(){
+						var temp = $(this).children();
+						temp.css({"margin-top":0}).html(appendMsg(temp.attr("firstFlag"),temp));
+					}).animate({
+						opacity:1
+					},2000,function(){
+						myAnimate($(this).children());					
+					});
+				}else{
+					show.attr("flag",1).children().html(appendMsg(1));
+					show.animate({
+						opacity:1
+					},2000,function(){
+						myAnimate($(this).children());					
+					});
+				}
+			}
+			
+			/*
+			*hoverFlag：如果为1，则表示是划过事件，此时需要强制进行动画
+			*/
+			function myAnimate(div,hoverFlag){
+				var mt = parseFloat(div.css("margin-top"));
+				var dest = 500 - div.height();
+				if(mt>dest || hoverFlag){
+					div.animate({
+						"margin-top":dest+"px"
+					},(mt-dest)/300*3000,function(){
+						var temp = appendMsg(div.attr("firstFlag"),div);
+						if(div.attr("overFlag") < 1){
+							div.append(temp);
+							myAnimate(div);
+						}
+					});
+					if(!div.attr("hoverFlag")){
+						div.hover(function(){
+							$(".show > div").stop();
+						},function(){
+							if(clickType != 'msg')
+								return;
+							var mt = parseFloat($(this).css("margin-top"));
+							var dest = 500 - $(this).height();
+							if(mt>dest){
+								$(".show > div").animate({
+								"margin-top":dest+"px"
+								},(mt-dest)/300*3000,function(){
+									myAnimate($(this),1);
+								});
+							}else{
+								$(".show > div").each(function(){
+									myAnimate($(this),1);
+								});
+							}
+						}
+						);
+						div.attr("hoverFlag",1)
+					}
+				}
+			}
+			
+			function appendMsg(firstFlag,div){
+				//判断是否已经到底
+				if(dateObj[nowClick].over && div){
+					div.attr("overFlag",div.attr("overFlag")*1 + 1);
+				}
+				if(firstFlag>1){					
+					return dateObj[nowClick].msg;
+				}
+				var dataNow = dateObj[nowClick];
+				var data = dataNow.data;
+				var temp = '';
+				if(dataNow.start == data.length){
+					dataNow.over = 1;//表示已经到底
+					if(dateObj[nowClick].over && div){
+						div.attr("overFlag",div.attr("overFlag")*1 + 1);
+					}
+				}
+				var start = dataNow.start;
+				for(var i=start;i<data.length && i<start+20;i++){
+					dataNow.start++;
+					if(data[i].sender==1){
+						temp += "<div class='msgBody receiver'>";
+						temp +="<img src='img/1_wechat.jpg'/>";
+						temp+="<div>"+data[i]['msgBody']+"</div>";						
+					}else{
+						temp += "<div class='msgBody sender'>";
+						temp+="<div>"+data[i]['msgBody']+"</div>";
+						temp +="<img src='img/2_wechat.jpg'/>";
+					}
+					temp+="</div>";
+				}
+				return dataNow.msg = temp;
+			}
+		</script>
+	</body>
+</html>
